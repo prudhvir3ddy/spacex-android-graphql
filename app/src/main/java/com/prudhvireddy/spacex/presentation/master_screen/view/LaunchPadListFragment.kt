@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
 import com.prudhvireddy.spacex.presentation.master_screen.viewmodel.MasterScreenViewModel
@@ -22,14 +23,32 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = DataBindingUtil.bind(view)
-
         viewModel.getData()
-
-        viewModel.launchPadList.observe(viewLifecycleOwner) {
-            (binding.rvLaunchpadList.adapter as LaunchPadListAdapter).submitList(it)
-        }
-
+        observeLaunchPadListData()
         binding.rvLaunchpadList.adapter = LaunchPadListAdapter()
+    }
+
+    private fun observeLaunchPadListData() {
+        viewModel.launchPadList.observe(viewLifecycleOwner) {
+            when (it) {
+                MasterScreenViewModel.ViewState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is MasterScreenViewModel.ViewState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Snackbar.make(
+                        binding.rvLaunchpadList,
+                        it.error,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+
+                }
+                is MasterScreenViewModel.ViewState.Success -> {
+                    (binding.rvLaunchpadList.adapter as LaunchPadListAdapter).submitList(it.data)
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
