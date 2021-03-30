@@ -1,11 +1,11 @@
-package com.prudhvireddy.spacex_leanix.screens.master_screen.viewmodel
+package com.prudhvireddy.spacex.presentation.master_screen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.prudhvireddy.spacex_leanix.LaunchPadListQuery
-import com.prudhvireddy.spacex_leanix.repository.SpaceXRepository
+import com.prudhvireddy.spacex.LaunchPadListQuery
+import com.prudhvireddy.spacex.domain.SpaceXRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

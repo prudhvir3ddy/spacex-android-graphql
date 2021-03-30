@@ -1,12 +1,12 @@
-package com.prudhvireddy.spacex_leanix.screens.master_screen.view
+package com.prudhvireddy.spacex.presentation.master_screen.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.prudhvireddy.spacex_leanix.LaunchPadListQuery
-import com.prudhvireddy.spacex_leanix.databinding.ItemLaunchpadBinding
+import com.prudhvireddy.spacex.LaunchPadListQuery
+import com.prudhvireddy.spacex.databinding.ItemLaunchpadBinding
 
 class LaunchPadListAdapter :
     ListAdapter<LaunchPadListQuery.Launchpad, LaunchPadListAdapter.LaunchPadViewHolder>(

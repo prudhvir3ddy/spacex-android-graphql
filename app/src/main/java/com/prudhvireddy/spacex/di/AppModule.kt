@@ -1,7 +1,7 @@
-package com.prudhvireddy.spacex_leanix.di
+package com.prudhvireddy.spacex.di
 
 import com.apollographql.apollo.ApolloClient
-import com.prudhvireddy.spacex_leanix.repository.SpaceXRepository
+import com.prudhvireddy.spacex.domain.SpaceXRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

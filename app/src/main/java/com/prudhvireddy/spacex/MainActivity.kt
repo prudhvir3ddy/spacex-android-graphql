@@ -1,10 +1,10 @@
-package com.prudhvireddy.spacex_leanix
+package com.prudhvireddy.spacex
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import com.prudhvireddy.spacex_leanix.screens.master_screen.view.LaunchPadListFragment
+import com.prudhvireddy.spacex.presentation.master_screen.view.LaunchPadListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

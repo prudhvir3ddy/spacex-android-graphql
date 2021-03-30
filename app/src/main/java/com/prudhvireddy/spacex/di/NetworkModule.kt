@@ -1,4 +1,4 @@
-package com.prudhvireddy.spacex_leanix.di
+package com.prudhvireddy.spacex.di
 
 import com.apollographql.apollo.ApolloClient
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.prudhvireddy.spacex_leanix
+package com.prudhvireddy.spacex
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

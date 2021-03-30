@@ -1,8 +1,8 @@
-package com.prudhvireddy.spacex_leanix.repository
+package com.prudhvireddy.spacex.domain
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.await
-import com.prudhvireddy.spacex_leanix.LaunchPadListQuery
+import com.prudhvireddy.spacex.LaunchPadListQuery
 import javax.inject.Inject
 
 class SpaceXRepository @Inject constructor(
@@ -17,4 +17,5 @@ class SpaceXRepository @Inject constructor(
             throw Exception(response.errors?.toString())
         }
     }
+
 }
