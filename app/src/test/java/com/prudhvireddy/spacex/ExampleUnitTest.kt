@@ -1,4 +1,4 @@
-package com.prudhvireddy.spacex_leanix
+package com.prudhvireddy.spacex
 
 import org.junit.Test
 

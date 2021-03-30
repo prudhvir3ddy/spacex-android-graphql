@@ -6,7 +6,7 @@
 
         <variable
             name="launchPad"
-            type="com.prudhvireddy.spacex_leanix.LaunchPadListQuery.Launchpad" />
+            type="com.prudhvireddy.spacex.LaunchPadListQuery.Launchpad" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
