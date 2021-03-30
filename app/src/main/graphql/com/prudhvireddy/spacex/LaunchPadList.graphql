@@ -1,5 +1,5 @@
-query LaunchPadList {
-  launchpads {
+query LaunchPadList($offset: Int, $limit: Int) {
+  launchpads(offset: $offset, limit: $limit) {
     id
     name
     attempted_launches

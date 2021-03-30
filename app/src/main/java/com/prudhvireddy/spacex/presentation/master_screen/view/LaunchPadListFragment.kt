@@ -5,11 +5,14 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
 import com.prudhvireddy.spacex.presentation.master_screen.viewmodel.MasterScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
@@ -19,33 +22,33 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         get() = _binding!!
 
     private val viewModel: MasterScreenViewModel by viewModels()
+    private val adapter: LaunchPadListAdapter = LaunchPadListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = DataBindingUtil.bind(view)
-        viewModel.getData()
-        observeLaunchPadListData()
-        binding.rvLaunchpadList.adapter = LaunchPadListAdapter()
+        observeLaunchPadListDataFlow()
+
+        binding.rvLaunchpadList.adapter = adapter
     }
 
-    private fun observeLaunchPadListData() {
-        viewModel.launchPadList.observe(viewLifecycleOwner) {
-            when (it) {
-                MasterScreenViewModel.ViewState.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is MasterScreenViewModel.ViewState.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    Snackbar.make(
+    private fun observeLaunchPadListDataFlow() {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModel.flow.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is LoadState.NotLoading -> binding.progressBar.visibility = View.GONE
+                    is LoadState.Error -> Snackbar.make(
                         binding.rvLaunchpadList,
-                        it.error,
+                        "something went wrong",
                         Snackbar.LENGTH_SHORT
                     ).show()
-
-                }
-                is MasterScreenViewModel.ViewState.Success -> {
-                    (binding.rvLaunchpadList.adapter as LaunchPadListAdapter).submitList(it.data)
-                    binding.progressBar.visibility = View.GONE
                 }
             }
         }
