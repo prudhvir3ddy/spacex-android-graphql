@@ -1,4 +1,4 @@
-package com.prudhvireddy.spacex_leanix.screens.master_screen
+package com.prudhvireddy.spacex_leanix.screens.master_screen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
