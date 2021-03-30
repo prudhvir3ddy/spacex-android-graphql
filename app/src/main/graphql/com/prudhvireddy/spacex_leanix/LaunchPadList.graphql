@@ -1,0 +1,11 @@
+query LaunchPadList {
+  launchpads {
+    id
+    name
+    attempted_launches
+    details
+    status
+    successful_launches
+    wikipedia
+  }
+}
