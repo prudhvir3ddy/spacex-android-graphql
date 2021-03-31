@@ -5,9 +5,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="launch"
             type="com.prudhvireddy.spacex.LaunchesPastListQuery.LaunchesPast" />
+
+        <variable
+            name="shouldShow"
+            type="Boolean" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -37,6 +43,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:text="@{@string/mission_name_template(launch.mission_name)}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -63,7 +70,7 @@
                 android:id="@+id/detail_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="@{shouldShow ? View.VISIBLE: View.GONE}"
                 tools:visibility="visible">
 
 
@@ -101,7 +108,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="@{@string/launch_date_template(launch.launch_date_local.toString())}"
+                    app:formattedDate="@{launch.launch_date_local.toString()}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"

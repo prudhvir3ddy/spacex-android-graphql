@@ -1,40 +1,32 @@
 package com.prudhvireddy.spacex.presentation.launches.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.prudhvireddy.spacex.LaunchesPastListQuery
 import com.prudhvireddy.spacex.databinding.ItemLaunchBinding
+import com.prudhvireddy.spacex.domain.LaunchPast
 
 class LaunchesListAdapter :
-    PagingDataAdapter<LaunchesPastListQuery.LaunchesPast, LaunchesListAdapter.LaunchesViewHolder>(
+    PagingDataAdapter<LaunchPast, LaunchesListAdapter.LaunchesViewHolder>(
         LaunchesDiffUtil()
     ) {
 
     class LaunchesViewHolder(private val binding: ItemLaunchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: LaunchesPastListQuery.LaunchesPast?) {
+        fun bind(item: LaunchPast?) {
             item?.let {
-                binding.launch = it
+                binding.launch = it.launchesPast
+                binding.shouldShow = it.shouldExpand
                 binding.rootLaunchCard.setOnClickListener {
-                    toggleVisibility(binding.detailContainer)
+                    item.shouldExpand = item.shouldExpand.not()
+                    bindingAdapter?.notifyItemChanged(position)
                 }
             }
         }
 
-        private fun toggleVisibility(detailContainer: ConstraintLayout) {
-            if (detailContainer.isVisible) {
-                detailContainer.visibility = View.GONE
-            } else {
-                detailContainer.visibility = View.VISIBLE
-            }
-        }
 
         companion object {
             fun from(parent: ViewGroup): LaunchesViewHolder {
@@ -56,15 +48,16 @@ class LaunchesListAdapter :
     }
 }
 
-class LaunchesDiffUtil : DiffUtil.ItemCallback<LaunchesPastListQuery.LaunchesPast>() {
+class LaunchesDiffUtil : DiffUtil.ItemCallback<LaunchPast>() {
     override fun areItemsTheSame(
-        oldItem: LaunchesPastListQuery.LaunchesPast,
-        newItem: LaunchesPastListQuery.LaunchesPast
-    ): Boolean = oldItem.id == newItem.id
+        oldItem: LaunchPast,
+        newItem: LaunchPast
+    ): Boolean = oldItem.launchesPast.id == newItem.launchesPast.id
 
     override fun areContentsTheSame(
-        oldItem: LaunchesPastListQuery.LaunchesPast,
-        newItem: LaunchesPastListQuery.LaunchesPast
-    ) = oldItem == newItem
+        oldItem: LaunchPast,
+        newItem: LaunchPast
+    ) = oldItem.launchesPast == newItem.launchesPast
 
 }
+
