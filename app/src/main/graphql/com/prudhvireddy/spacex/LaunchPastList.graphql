@@ -1,0 +1,8 @@
+query LaunchesPastList($find: LaunchFind, $limit: Int, $offset: Int) {
+  launchesPast(find: $find, limit: $limit, offset: $offset) {
+		id
+    launch_site {
+      site_name
+    }
+  }
+}

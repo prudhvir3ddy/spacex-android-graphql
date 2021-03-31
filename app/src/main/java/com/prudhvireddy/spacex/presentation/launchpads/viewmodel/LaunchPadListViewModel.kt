@@ -1,4 +1,4 @@
-package com.prudhvireddy.spacex.presentation.master_screen.viewmodel
+package com.prudhvireddy.spacex.presentation.launchpads.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MasterScreenViewModel @Inject constructor(
+class LaunchPadListViewModel @Inject constructor(
     private val repository: SpaceXRepository
 ) : ViewModel() {
 
@@ -25,11 +25,4 @@ class MasterScreenViewModel @Inject constructor(
     ) {
         LaunchPadListPagingSource(repository)
     }.flow.cachedIn(viewModelScope)
-
-
-    sealed class ViewState {
-        data class Success(val data: List<LaunchPadListQuery.Launchpad?>) : ViewState()
-        object Loading : ViewState()
-        data class Error(val error: String) : ViewState()
-    }
 }

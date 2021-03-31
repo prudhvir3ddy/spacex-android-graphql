@@ -4,6 +4,8 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.prudhvireddy.spacex.LaunchPadListQuery
+import com.prudhvireddy.spacex.LaunchesPastListQuery
+import com.prudhvireddy.spacex.type.LaunchFind
 import javax.inject.Inject
 
 class SpaceXRepository @Inject constructor(
@@ -20,6 +22,29 @@ class SpaceXRepository @Inject constructor(
             ).await()
         return if (!response.hasErrors() && response.data?.launchpads != null) {
             response.data?.launchpads!!
+        } else {
+            throw Exception(response.errors?.toString())
+        }
+    }
+
+    suspend fun getLaunchPastList(
+        siteId: String,
+        offset: Int,
+        limit: Int
+    ): List<LaunchesPastListQuery.LaunchesPast?> {
+        val response = apolloClient.query(
+            LaunchesPastListQuery(
+                find = Input.fromNullable(
+                    LaunchFind(
+                        site_id = Input.fromNullable(siteId)
+                    )
+                ),
+                limit = Input.fromNullable(limit),
+                offset = Input.fromNullable(offset)
+            )
+        ).await()
+        return if (!response.hasErrors() && response.data?.launchesPast != null) {
+            response.data?.launchesPast!!
         } else {
             throw Exception(response.errors?.toString())
         }

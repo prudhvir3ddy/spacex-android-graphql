@@ -2,41 +2,40 @@ package com.prudhvireddy.spacex.domain
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.prudhvireddy.spacex.LaunchPadListQuery
+import com.prudhvireddy.spacex.LaunchesPastListQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-const val START_INDEX = 0
-const val LOAD_SIZE = 5
+const val LOAD_SIZE_LAUNCHES = 5
 
-class LaunchPadListPagingSource @Inject constructor(
+class LaunchesPastListPagingSource @Inject constructor(
+    private val siteId: String,
     private val repository: SpaceXRepository
-) : PagingSource<Int, LaunchPadListQuery.Launchpad>() {
-    override fun getRefreshKey(state: PagingState<Int, LaunchPadListQuery.Launchpad>): Int? {
+): PagingSource<Int, LaunchesPastListQuery.LaunchesPast>() {
+    override fun getRefreshKey(state: PagingState<Int, LaunchesPastListQuery.LaunchesPast>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
-
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LaunchPadListQuery.Launchpad> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LaunchesPastListQuery.LaunchesPast> {
         return try {
             val offset = (params.key ?: START_INDEX)
-            val limit = LOAD_SIZE
-            val response = repository.getLaunchPadList(offset, limit)
+            val limit = LOAD_SIZE_LAUNCHES
+            val response = repository.getLaunchPastList(siteId, offset, limit)
             val nextKey = if (response.isNullOrEmpty()) {
                 null
             } else {
                 offset + LOAD_SIZE
             }
 
-            val nonNullList = mutableListOf<LaunchPadListQuery.Launchpad>()
+            val nonNullList = mutableListOf<LaunchesPastListQuery.LaunchesPast>()
             withContext(Dispatchers.Default) {
                 response.forEach {
-                    it?.let { launchpad ->
-                        nonNullList.add(launchpad)
+                    it?.let { launchpast ->
+                        nonNullList.add(launchpast)
                     }
                 }
             }
@@ -45,10 +44,5 @@ class LaunchPadListPagingSource @Inject constructor(
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
-
     }
-
 }
-
-
-

@@ -1,16 +1,20 @@
-package com.prudhvireddy.spacex.presentation.master_screen.view
+package com.prudhvireddy.spacex.presentation.launchpads.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
-import com.prudhvireddy.spacex.presentation.master_screen.viewmodel.MasterScreenViewModel
+import com.prudhvireddy.spacex.presentation.launches.view.LaunchesFragment
+import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -21,7 +25,7 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     private val binding: FragmentLaunchpadListBinding
         get() = _binding!!
 
-    private val viewModel: MasterScreenViewModel by viewModels()
+    private val viewModel: LaunchPadListViewModel by viewModels()
     private val adapter: LaunchPadListAdapter = LaunchPadListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,6 +34,16 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         observeLaunchPadListDataFlow()
 
         binding.rvLaunchpadList.adapter = adapter
+
+
+        parentFragmentManager.commit {
+            val bundle = bundleOf(LaunchesFragment.SITE_ID to "ccafs_slc_40")
+            replace(
+                requireActivity().findViewById<FragmentContainerView>(R.id.container).id,
+                LaunchesFragment::class.java, bundle
+            )
+        }
+
     }
 
     private fun observeLaunchPadListDataFlow() {

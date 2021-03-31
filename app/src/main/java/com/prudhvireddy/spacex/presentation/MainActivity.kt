@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.prudhvireddy.spacex.R
-import com.prudhvireddy.spacex.presentation.master_screen.view.LaunchPadListFragment
+import com.prudhvireddy.spacex.presentation.launchpads.view.LaunchPadListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
