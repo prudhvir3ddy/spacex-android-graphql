@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/launchPadListFragment">
+    <fragment
+        android:id="@+id/launchPadListFragment"
+        android:name="com.prudhvireddy.spacex.presentation.launchpads.view.LaunchPadListFragment"
+        android:label="LaunchPads SpaceX" >
+        <action
+            android:id="@+id/action_launchPadListFragment_to_launchesFragment"
+            app:destination="@id/launchesFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/launchesFragment"
+        android:name="com.prudhvireddy.spacex.presentation.launches.view.LaunchesFragment"
+        android:label="Previous Launches" >
+        <action
+            android:id="@+id/action_launchesFragment_pop"
+            app:popUpTo="@id/launchesFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="site_id"
+            app:argType="string" />
+    </fragment>
+</navigation>

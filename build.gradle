@@ -8,6 +8,8 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.4"
+
         /*
             The Hilt Gradle plugin runs a bytecode transformation to make the APIs easier to use.
             The plugin was created for a better developer experience in the IDE since the generated class can disrupt code completion for methods on the base class.

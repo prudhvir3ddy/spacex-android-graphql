@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
     id("com.apollographql.apollo").version("2.5.5")
 }
 
@@ -63,6 +64,9 @@ dependencies {
     // pagination
     implementation "androidx.paging:paging-runtime-ktx:3.0.0-beta03"
 
+    // navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.4"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.4"
 
 }
 

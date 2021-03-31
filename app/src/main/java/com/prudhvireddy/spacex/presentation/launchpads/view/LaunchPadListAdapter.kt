@@ -8,32 +8,48 @@ import androidx.recyclerview.widget.RecyclerView
 import com.prudhvireddy.spacex.LaunchPadListQuery
 import com.prudhvireddy.spacex.databinding.ItemLaunchpadBinding
 
-class LaunchPadListAdapter :
+class LaunchPadListAdapter(
+    private val onItemClicked: (LaunchPadListQuery.Launchpad) -> Unit
+) :
     PagingDataAdapter<LaunchPadListQuery.Launchpad, LaunchPadListAdapter.LaunchPadViewHolder>(
         LaunchPadDiffUtil()
     ) {
 
-    class LaunchPadViewHolder(private val binding: ItemLaunchpadBinding) :
+    class LaunchPadViewHolder(
+        private val binding: ItemLaunchpadBinding,
+        private val onItemClicked: (LaunchPadListQuery.Launchpad) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: LaunchPadListQuery.Launchpad?) {
-            item?.let {
-                binding.launchPad = it
+            item?.let { launchPad ->
+                binding.launchPad = launchPad
+                binding.root.setOnClickListener {
+                    onItemClicked(launchPad)
+                }
             }
         }
 
         companion object {
-            fun from(parent: ViewGroup): LaunchPadViewHolder {
+            fun from(
+                parent: ViewGroup,
+                onItemClicked: (LaunchPadListQuery.Launchpad) -> Unit
+            ): LaunchPadViewHolder {
 
                 return LaunchPadViewHolder(
-                    ItemLaunchpadBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemLaunchpadBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    ),
+                    onItemClicked
                 )
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LaunchPadViewHolder {
-        return LaunchPadViewHolder.from(parent)
+        return LaunchPadViewHolder.from(parent, onItemClicked)
     }
 
     override fun onBindViewHolder(holder: LaunchPadViewHolder, position: Int) {

@@ -30,7 +30,7 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
         _binding = FragmentLaunchesBinding.bind(view)
 
         binding.rvLaunchList.adapter = adapter
-        requireArguments().getString(SITE_ID)?.let {
+        arguments?.getString(SITE_ID)?.let {
             viewLifecycleOwner.lifecycleScope.launchWhenResumed {
                 viewModel.getLaunchesPast(it).collectLatest {
                     adapter.submitData(it)
