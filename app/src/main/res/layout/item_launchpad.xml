@@ -61,18 +61,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_success_rate_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/success_rate"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_launchpad_name" />
-
-            <TextView
                 android:id="@+id/tv_success_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,9 +69,9 @@
                 android:text="@{@string/success_rate_template(launchPad.successful_launches,launchPad.attempted_launches)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/tv_success_rate_label"
-                app:layout_constraintTop_toBottomOf="@+id/tv_launchpad_name"
-                tools:text="26 / 30" />
+                tools:text="success rate: 20/30"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_launchpad_name" />
 
             <TextView
                 android:id="@+id/tv_status_label"
@@ -91,24 +79,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/status"
+                android:text="@{@string/status_template(launchPad.status)}"
+                app:layout_constraintTop_toBottomOf="@+id/tv_success_rate"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_success_rate_label" />
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@{launchPad.status}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/tv_status_label"
-                app:layout_constraintTop_toBottomOf="@+id/tv_success_rate"
-                tools:text="retired" />
+                tools:text="status: retired" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/tv_wiki_link"
@@ -123,7 +99,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_success_rate"
                 app:link="@{launchPad.wikipedia}" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

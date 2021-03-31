@@ -3,9 +3,8 @@
     <string name="something_went_wrong">something went wrong</string>
     <string name="launch_pad">LAUNCH PAD</string>
     <string name="comet">☄️</string>
-    <string name="success_rate">success rate: </string>
-    <string name="success_rate_template">%1$s / %2$s</string>
-    <string name="status">status: </string>
+    <string name="success_rate_template">success rate: %1$s / %2$s</string>
+    <string name="status_template">status: %1$s</string>
     <string name="rocket_name_template">rocket name: %1$s</string>
     <string name="launch_date_template">launch date: %1$s</string>
     <string name="wikipedia">Wikipedia</string>
