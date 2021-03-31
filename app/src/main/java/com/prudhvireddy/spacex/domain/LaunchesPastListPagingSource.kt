@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-const val LOAD_SIZE_LAUNCHES = 5
+const val LOAD_SIZE_LAUNCHES = 10
 
 class LaunchesPastListPagingSource @Inject constructor(
     private val siteId: String,
@@ -28,7 +28,7 @@ class LaunchesPastListPagingSource @Inject constructor(
             val nextKey = if (response.isNullOrEmpty()) {
                 null
             } else {
-                offset + LOAD_SIZE
+                offset + LOAD_SIZE_LAUNCHES
             }
 
             val nonNullList = mutableListOf<LaunchesPastListQuery.LaunchesPast>()
