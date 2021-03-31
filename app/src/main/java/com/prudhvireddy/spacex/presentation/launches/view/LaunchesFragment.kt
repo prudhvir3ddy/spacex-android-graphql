@@ -5,6 +5,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
+import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchesBinding
 import com.prudhvireddy.spacex.presentation.launches.viewmodel.LaunchesViewModel
@@ -19,9 +22,7 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
 
     private val adapter = LaunchesListAdapter()
 
-    companion object {
-        const val SITE_ID = "site_id"
-    }
+    private val args: LaunchesFragmentArgs by navArgs()
 
     private val viewModel: LaunchesViewModel by viewModels()
 
@@ -30,10 +31,23 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
         _binding = FragmentLaunchesBinding.bind(view)
 
         binding.rvLaunchList.adapter = adapter
-        arguments?.getString(SITE_ID)?.let {
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                viewModel.getLaunchesPast(it).collectLatest {
-                    adapter.submitData(it)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModel.getLaunchesPast(args.siteId).collectLatest {
+                adapter.submitData(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is LoadState.NotLoading -> binding.progressBar.visibility = View.GONE
+                    is LoadState.Error -> Snackbar.make(
+                        binding.rvLaunchList,
+                        getString(R.string.something_went_wrong),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
