@@ -10,6 +10,7 @@ import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchesBinding
+import com.prudhvireddy.spacex.domain.LaunchPast
 import com.prudhvireddy.spacex.presentation.launches.viewmodel.LaunchesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -20,7 +21,13 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
     private var _binding: FragmentLaunchesBinding? = null
     private val binding: FragmentLaunchesBinding get() = _binding!!
 
-    private val adapter = LaunchesListAdapter()
+
+    private val onItemClicked = { position: Int, item: LaunchPast ->
+        item.shouldExpand = item.shouldExpand.not()
+        adapter.notifyItemChanged(position)
+    }
+
+    private val adapter: LaunchesListAdapter = LaunchesListAdapter(onItemClicked)
 
     private val args: LaunchesFragmentArgs by navArgs()
 
