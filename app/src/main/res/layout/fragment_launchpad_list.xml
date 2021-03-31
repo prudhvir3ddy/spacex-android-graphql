@@ -25,5 +25,11 @@
             tools:listitem="@layout/item_launchpad"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <ImageView
+            android:id="@+id/iv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:srcCompat="@drawable/rocket" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

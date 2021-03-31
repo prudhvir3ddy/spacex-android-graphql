@@ -50,11 +50,23 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
                 when (loadState.refresh) {
                     is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is LoadState.NotLoading -> binding.progressBar.visibility = View.GONE
-                    is LoadState.Error -> Snackbar.make(
-                        binding.rvLaunchList,
-                        getString(R.string.something_went_wrong),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    is LoadState.Error -> {
+                        Snackbar.make(
+                            binding.rvLaunchList,
+                            getString(R.string.something_went_wrong),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        binding.progressBar.visibility = View.GONE
+                        binding.rvLaunchList.visibility = View.GONE
+                        binding.ivEmpty.visibility = View.VISIBLE
+                    }
+                }
+
+                if (loadState.append.endOfPaginationReached) {
+                    if (adapter.itemCount < 1) {
+                        binding.rvLaunchList.visibility = View.GONE
+                        binding.ivEmpty.visibility = View.VISIBLE
+                    }
                 }
             }
         }

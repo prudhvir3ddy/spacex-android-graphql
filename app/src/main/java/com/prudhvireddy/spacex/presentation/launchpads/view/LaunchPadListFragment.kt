@@ -66,6 +66,14 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
                             Snackbar.LENGTH_SHORT
                         ).show()
                         binding.progressBar.visibility = View.GONE
+                        binding.rvLaunchpadList.visibility = View.GONE
+                        binding.ivEmpty.visibility = View.VISIBLE
+                    }
+                }
+                if (loadState.append.endOfPaginationReached) {
+                    if (adapter.itemCount < 1) {
+                        binding.rvLaunchpadList.visibility = View.GONE
+                        binding.ivEmpty.visibility = View.VISIBLE
                     }
                 }
             }
