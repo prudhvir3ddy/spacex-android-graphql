@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/launchPadListFragment"
         android:name="com.prudhvireddy.spacex.presentation.launchpads.view.LaunchPadListFragment"
-        android:label="LaunchPads SpaceX" >
+        android:label="LaunchPads SpaceX 🚀" >
         <action
             android:id="@+id/action_launchPadListFragment_to_launchesFragment"
             app:destination="@id/launchesFragment" />
