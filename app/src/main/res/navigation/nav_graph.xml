@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/launchPadListFragment"
         android:name="com.prudhvireddy.spacex.presentation.launchpads.view.LaunchPadListFragment"
-        android:label="LaunchPads SpaceX 🚀" >
+        android:label="LaunchPads SpaceX 🔭" >
         <action
             android:id="@+id/action_launchPadListFragment_to_launchesFragment"
             app:destination="@id/launchesFragment" />
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/launchesFragment"
         android:name="com.prudhvireddy.spacex.presentation.launches.view.LaunchesFragment"
-        android:label="Previous Launches" >
+        android:label="Previous Launches 🛰️" >
         <action
             android:id="@+id/action_launchesFragment_pop"
             app:popUpTo="@id/launchesFragment"

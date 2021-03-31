@@ -120,7 +120,6 @@
                 android:linksClickable="true"
                 android:text="@string/wikipedia"
                 android:textColor="@android:color/holo_blue_light"
-                android:textColorLink="@android:color/holo_blue_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_success_rate"
                 app:link="@{launchPad.wikipedia}" />

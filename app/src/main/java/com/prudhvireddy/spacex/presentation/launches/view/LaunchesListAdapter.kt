@@ -1,7 +1,10 @@
 package com.prudhvireddy.spacex.presentation.launches.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +22,17 @@ class LaunchesListAdapter :
         fun bind(item: LaunchesPastListQuery.LaunchesPast?) {
             item?.let {
                 binding.launch = it
+                binding.rootLaunchCard.setOnClickListener {
+                    toggleVisibility(binding.detailContainer)
+                }
+            }
+        }
+
+        private fun toggleVisibility(detailContainer: ConstraintLayout) {
+            if (detailContainer.isVisible) {
+                detailContainer.visibility = View.GONE
+            } else {
+                detailContainer.visibility = View.VISIBLE
             }
         }
 

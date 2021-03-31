@@ -6,5 +6,8 @@
     <string name="success_rate">success rate: </string>
     <string name="success_rate_template">%1$s / %2$s</string>
     <string name="status">status: </string>
+    <string name="rocket_name_template">rocket name: %1$s</string>
+    <string name="launch_date_template">launch date: %1$s</string>
     <string name="wikipedia">Wikipedia</string>
+    <string name="mission_name_template">%1$s   🚀 </string>
 </resources>

@@ -59,11 +59,14 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
                 when (loadState.refresh) {
                     is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is LoadState.NotLoading -> binding.progressBar.visibility = View.GONE
-                    is LoadState.Error -> Snackbar.make(
-                        binding.rvLaunchpadList,
-                        getString(R.string.something_went_wrong),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    is LoadState.Error -> {
+                        Snackbar.make(
+                            binding.rvLaunchpadList,
+                            getString(R.string.something_went_wrong),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        binding.progressBar.visibility = View.GONE
+                    }
                 }
             }
         }
