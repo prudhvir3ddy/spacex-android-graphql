@@ -3,8 +3,6 @@ package com.prudhvireddy.spacex.domain
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.prudhvireddy.spacex.LaunchesPastListQuery
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 const val LOAD_SIZE_LAUNCHES = 10
@@ -31,16 +29,7 @@ class LaunchesPastListPagingSource @Inject constructor(
                 offset + LOAD_SIZE_LAUNCHES
             }
 
-            val nonNullList = mutableListOf<LaunchPast>()
-            withContext(Dispatchers.Default) {
-                response.forEach {
-                    it?.let { launchpast ->
-                        nonNullList.add(LaunchPast(launchpast))
-                    }
-                }
-            }
-
-            LoadResult.Page(nonNullList, null, nextKey)
+            LoadResult.Page(response, null, nextKey)
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

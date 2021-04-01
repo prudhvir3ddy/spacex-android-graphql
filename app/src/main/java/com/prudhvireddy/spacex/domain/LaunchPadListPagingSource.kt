@@ -3,8 +3,6 @@ package com.prudhvireddy.spacex.domain
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.prudhvireddy.spacex.LaunchPadListQuery
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 const val START_INDEX = 0
@@ -31,17 +29,7 @@ class LaunchPadListPagingSource @Inject constructor(
             } else {
                 offset + LOAD_SIZE
             }
-
-            val nonNullList = mutableListOf<LaunchPadListQuery.Launchpad>()
-            withContext(Dispatchers.Default) {
-                response.forEach {
-                    it?.let { launchpad ->
-                        nonNullList.add(launchpad)
-                    }
-                }
-            }
-
-            LoadResult.Page(nonNullList, null, nextKey)
+            LoadResult.Page(response, null, nextKey)
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
