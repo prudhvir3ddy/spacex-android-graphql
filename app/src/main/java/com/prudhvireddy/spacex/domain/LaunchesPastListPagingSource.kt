@@ -1,5 +1,6 @@
 package com.prudhvireddy.spacex.domain
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.prudhvireddy.spacex.LaunchesPastListQuery
@@ -28,6 +29,7 @@ class LaunchesPastListPagingSource @Inject constructor(
             val offset = (params.key ?: START_INDEX)
             val limit = LOAD_SIZE_LAUNCHES
             var response = repository.getLaunchPastList(siteId, offset, limit)
+            Log.d("boom", "$offset $limit")
             val nextKey = if (response.isNullOrEmpty()) {
                 null
             } else {

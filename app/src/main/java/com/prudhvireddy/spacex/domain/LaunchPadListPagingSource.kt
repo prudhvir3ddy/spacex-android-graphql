@@ -30,7 +30,7 @@ class LaunchPadListPagingSource @Inject constructor(
             val offset = (params.key ?: START_INDEX)
             val limit = LOAD_SIZE
             var response = repository.getLaunchPadList(offset, limit)
-            Log.d("boom", "$offset $limit")
+            Log.d("boom", "$offset $limit $response")
             val nextKey = if (response.isNullOrEmpty()) {
                 null
             } else {

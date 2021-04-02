@@ -2,7 +2,6 @@ package com.prudhvireddy.spacex.presentation.launchpads.view
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,10 +17,7 @@ import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
 import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,9 +46,8 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         Unit
     }
 
-    private val listener: SharedPreferences.OnSharedPreferenceChangeListener? =
+    private val listener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            Log.d("boom", key)
             if (key == SpaceXSharedPrefs.PrefConstants.SORT) {
                 restartFetch()
             }
@@ -78,27 +73,20 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
 
     private fun observeViewState() {
         viewLifecycleOwner.lifecycleScope.launch {
-
-            adapter.loadStateFlow
-                // Only emit when REFRESH LoadState for RemoteMediator changes.
-                .distinctUntilChangedBy { it.refresh }
-                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                .filter { it.refresh is LoadState.NotLoading }
-                .collect {
-                    binding.rvLaunchpadList.scrollToPosition(0)
-                }
-
             adapter.loadStateFlow.collectLatest { loadState ->
                 when (loadState.refresh) {
-                    is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
-                    is LoadState.NotLoading -> binding.progressBar.visibility = View.GONE
+                    is LoadState.Loading -> {
+                        showLoadingView()
+                    }
+                    is LoadState.NotLoading -> {
+                        showNewData()
+                    }
                     is LoadState.Error -> {
                         Snackbar.make(
                             binding.rvLaunchpadList,
                             getString(R.string.something_went_wrong),
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        binding.progressBar.visibility = View.GONE
                         showNoContentView()
                     }
                 }
@@ -109,6 +97,19 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
                 }
             }
         }
+    }
+
+    private fun showNewData() {
+        binding.ivEmpty.visibility = View.GONE
+        binding.rvLaunchpadList.visibility = View.VISIBLE
+        binding.rvLaunchpadList.scrollToPosition(0)
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showLoadingView() {
+        binding.rvLaunchpadList.visibility = View.GONE
+        binding.ivEmpty.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun observeLaunchPadListDataFlow() {
@@ -127,6 +128,7 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         ).show()
         binding.rvLaunchpadList.visibility = View.GONE
         binding.ivEmpty.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun onDestroyView() {

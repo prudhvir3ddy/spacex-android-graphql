@@ -2,11 +2,9 @@ package com.prudhvireddy.spacex.presentation.launches.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import com.prudhvireddy.spacex.data.LaunchPast
 import com.prudhvireddy.spacex.domain.LOAD_SIZE_LAUNCHES
@@ -39,7 +37,7 @@ class LaunchesViewModel @AssistedInject constructor(
             pagingData.map {
                 LaunchPast(it)
             }
-        }.cachedIn(viewModelScope)
+        }
     }
 
     companion object {
