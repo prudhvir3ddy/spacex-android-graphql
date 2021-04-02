@@ -17,7 +17,10 @@ import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
 import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,6 +76,14 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
 
     private fun observeViewState() {
         viewLifecycleOwner.lifecycleScope.launch {
+            adapter.loadStateFlow
+                // Only emit when REFRESH LoadState changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvLaunchpadList.scrollToPosition(0) }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             adapter.loadStateFlow.collectLatest { loadState ->
                 when (loadState.refresh) {
                     is LoadState.Loading -> {
@@ -102,7 +113,6 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     private fun showNewData() {
         binding.ivEmpty.visibility = View.GONE
         binding.rvLaunchpadList.visibility = View.VISIBLE
-        binding.rvLaunchpadList.scrollToPosition(0)
         binding.progressBar.visibility = View.GONE
     }
 

@@ -19,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -74,6 +76,15 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
 
     private fun observeViewStates() {
         viewLifecycleOwner.lifecycleScope.launch {
+            adapter.loadStateFlow
+                // Only emit when REFRESH LoadState changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvLaunchList.scrollToPosition(0) }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+
             adapter.loadStateFlow.collectLatest { loadState ->
                 when (loadState.refresh) {
                     is LoadState.Loading -> {
@@ -103,7 +114,6 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
 
     private fun showNewData() {
         binding.rvLaunchList.visibility = View.VISIBLE
-        binding.rvLaunchList.scrollToPosition(0)
         binding.progressBar.visibility = View.GONE
         binding.ivEmpty.visibility = View.GONE
     }
