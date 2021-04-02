@@ -43,7 +43,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:text="@{@string/mission_name_template(launch.mission_name)}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
