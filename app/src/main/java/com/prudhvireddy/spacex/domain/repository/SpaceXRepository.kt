@@ -5,7 +5,6 @@ import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.prudhvireddy.spacex.LaunchPadListQuery
 import com.prudhvireddy.spacex.LaunchesPastListQuery
-import com.prudhvireddy.spacex.data.LaunchPast
 import com.prudhvireddy.spacex.type.LaunchFind
 import javax.inject.Inject
 

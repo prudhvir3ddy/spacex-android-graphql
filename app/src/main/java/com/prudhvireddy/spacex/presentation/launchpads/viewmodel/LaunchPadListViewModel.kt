@@ -1,10 +1,8 @@
 package com.prudhvireddy.spacex.presentation.launchpads.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
 import com.prudhvireddy.spacex.domain.LOAD_SIZE
 import com.prudhvireddy.spacex.domain.LaunchPadListPagingSource
 import com.prudhvireddy.spacex.domain.repository.SpaceXRepository
