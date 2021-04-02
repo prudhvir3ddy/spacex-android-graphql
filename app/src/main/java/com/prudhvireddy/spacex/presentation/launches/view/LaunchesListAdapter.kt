@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.prudhvireddy.spacex.data.LaunchPast
 import com.prudhvireddy.spacex.databinding.ItemLaunchBinding
-import com.prudhvireddy.spacex.domain.LaunchPast
 
 class LaunchesListAdapter(
     private val onItemClicked: (Int, LaunchPast) -> Unit

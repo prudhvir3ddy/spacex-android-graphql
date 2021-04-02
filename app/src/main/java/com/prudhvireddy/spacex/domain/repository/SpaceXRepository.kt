@@ -1,13 +1,12 @@
-package com.prudhvireddy.spacex.domain
+package com.prudhvireddy.spacex.domain.repository
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.prudhvireddy.spacex.LaunchPadListQuery
 import com.prudhvireddy.spacex.LaunchesPastListQuery
+import com.prudhvireddy.spacex.data.LaunchPast
 import com.prudhvireddy.spacex.type.LaunchFind
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SpaceXRepository @Inject constructor(
@@ -34,7 +33,7 @@ class SpaceXRepository @Inject constructor(
         siteId: String,
         offset: Int,
         limit: Int
-    ): List<LaunchPast> {
+    ): List<LaunchesPastListQuery.LaunchesPast> {
         val response = apolloClient.query(
             LaunchesPastListQuery(
                 find = Input.fromNullable(
@@ -48,15 +47,7 @@ class SpaceXRepository @Inject constructor(
         ).await()
         return if (!response.hasErrors() && response.data?.launchesPast != null) {
             val launches = response.data?.launchesPast!!
-            val nonNullList = mutableListOf<LaunchPast>()
-            withContext(Dispatchers.Default) {
-                launches.forEach {
-                    it?.let { launchpad ->
-                        nonNullList.add(LaunchPast(launchpad))
-                    }
-                }
-            }
-            nonNullList
+            launches.filterNotNull()
         } else {
             throw Exception(response.errors?.toString())
         }

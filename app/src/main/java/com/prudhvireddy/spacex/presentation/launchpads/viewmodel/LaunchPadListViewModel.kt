@@ -7,13 +7,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.prudhvireddy.spacex.domain.LOAD_SIZE
 import com.prudhvireddy.spacex.domain.LaunchPadListPagingSource
-import com.prudhvireddy.spacex.domain.SpaceXRepository
+import com.prudhvireddy.spacex.domain.repository.SpaceXRepository
+import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LaunchPadListViewModel @Inject constructor(
-    private val repository: SpaceXRepository
+    private val repository: SpaceXRepository,
+    private val sharedPrefs: SpaceXSharedPrefs
 ) : ViewModel() {
 
     val flow = Pager(
@@ -23,6 +25,6 @@ class LaunchPadListViewModel @Inject constructor(
             initialLoadSize = LOAD_SIZE
         )
     ) {
-        LaunchPadListPagingSource(repository)
-    }.flow.cachedIn(viewModelScope)
+        LaunchPadListPagingSource(repository, sharedPrefs)
+    }.flow
 }

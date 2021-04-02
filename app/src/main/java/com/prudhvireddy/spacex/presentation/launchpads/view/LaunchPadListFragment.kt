@@ -2,6 +2,7 @@ package com.prudhvireddy.spacex.presentation.launchpads.view
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,9 +14,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.LaunchPadListQuery
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
+import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
 import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +37,8 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
 
     private val viewModel: LaunchPadListViewModel by viewModels()
 
+    private var job: Job? = null
+
     private val onItemClick = { launchPad: LaunchPadListQuery.Launchpad ->
         launchPad.id?.let {
             val action =
@@ -41,25 +50,44 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         Unit
     }
 
+    private val listener: SharedPreferences.OnSharedPreferenceChangeListener? =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            Log.d("boom", key)
+            if (key == SpaceXSharedPrefs.PrefConstants.SORT) {
+                restartFetch()
+            }
+        }
+
     private val adapter: LaunchPadListAdapter = LaunchPadListAdapter(onItemClick)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
         _binding = DataBindingUtil.bind(view)
 
         binding.rvLaunchpadList.adapter = adapter
 
         observeLaunchPadListDataFlow()
+        observeViewState()
     }
 
-    private fun observeLaunchPadListDataFlow() {
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            viewModel.flow.collectLatest {
-                adapter.submitData(it)
-            }
-        }
+    private fun restartFetch() {
+        job?.cancel()
+        observeLaunchPadListDataFlow()
+    }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+    private fun observeViewState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            adapter.loadStateFlow
+                // Only emit when REFRESH LoadState for RemoteMediator changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect {
+                    binding.rvLaunchpadList.scrollToPosition(0)
+                }
+
             adapter.loadStateFlow.collectLatest { loadState ->
                 when (loadState.refresh) {
                     is LoadState.Loading -> binding.progressBar.visibility = View.VISIBLE
@@ -83,6 +111,14 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         }
     }
 
+    private fun observeLaunchPadListDataFlow() {
+        job = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.flow.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
     private fun showNoContentView() {
         Snackbar.make(
             binding.rvLaunchpadList,
@@ -95,6 +131,7 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
         _binding = null
     }
 }

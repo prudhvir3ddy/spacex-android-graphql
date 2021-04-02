@@ -1,34 +1,56 @@
 package com.prudhvireddy.spacex.presentation.launches.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
+import com.prudhvireddy.spacex.data.LaunchPast
 import com.prudhvireddy.spacex.domain.LOAD_SIZE_LAUNCHES
-import com.prudhvireddy.spacex.domain.LaunchPast
 import com.prudhvireddy.spacex.domain.LaunchesPastListPagingSource
-import com.prudhvireddy.spacex.domain.SpaceXRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.prudhvireddy.spacex.domain.repository.SpaceXRepository
+import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 
-@HiltViewModel
-class LaunchesViewModel @Inject constructor(
-    private val repository: SpaceXRepository
+class LaunchesViewModel @AssistedInject constructor(
+    private val repository: SpaceXRepository,
+    private val sharedPrefs: SpaceXSharedPrefs,
+    @Assisted private val siteId: String
 ) : ViewModel() {
 
-    fun getLaunchesPast(siteId: String): Flow<PagingData<LaunchPast>> {
-        return Pager(
-            PagingConfig(
-                pageSize = LOAD_SIZE_LAUNCHES,
-                enablePlaceholders = false,
-                initialLoadSize = LOAD_SIZE_LAUNCHES
-            )
-        ) {
-            LaunchesPastListPagingSource(siteId, repository)
-        }.flow.cachedIn(viewModelScope)
+    private val pager = Pager(
+        PagingConfig(
+            pageSize = LOAD_SIZE_LAUNCHES,
+            enablePlaceholders = false,
+            initialLoadSize = LOAD_SIZE_LAUNCHES
+        )
+    ) {
+        LaunchesPastListPagingSource(siteId, repository, sharedPrefs)
     }
 
+    fun getLaunchesPast(): Flow<PagingData<LaunchPast>> {
+        return pager.flow.map { pagingData ->
+            pagingData.map {
+                LaunchPast(it)
+            }
+        }.cachedIn(viewModelScope)
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: LaunchesViewModelFactory,
+            siteId: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(siteId) as T
+            }
+
+        }
+    }
 }

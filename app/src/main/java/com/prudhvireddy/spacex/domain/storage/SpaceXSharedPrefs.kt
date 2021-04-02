@@ -1,9 +1,9 @@
-package com.prudhvireddy.spacex.domain
+package com.prudhvireddy.spacex.domain.storage
 
 import android.content.SharedPreferences
-import com.prudhvireddy.spacex.domain.SharedPrefs.PrefConstants.SORT
+import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs.PrefConstants.SORT
 
-class SharedPrefs(
+class SpaceXSharedPrefs(
     private val
     sharedPreferences: SharedPreferences
 ) {
