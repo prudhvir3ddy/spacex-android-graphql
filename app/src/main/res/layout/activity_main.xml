@@ -15,6 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:menu="@menu/menu"
             android:layout_height="wrap_content" />
 
         <androidx.fragment.app.FragmentContainerView

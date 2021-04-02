@@ -1,5 +1,6 @@
 package com.prudhvireddy.spacex.presentation.launchpads.view
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -15,6 +16,7 @@ import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
 import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
@@ -22,6 +24,9 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     private var _binding: FragmentLaunchpadListBinding? = null
     private val binding: FragmentLaunchpadListBinding
         get() = _binding!!
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     private val viewModel: LaunchPadListViewModel by viewModels()
 
@@ -41,10 +46,10 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = DataBindingUtil.bind(view)
-        observeLaunchPadListDataFlow()
 
         binding.rvLaunchpadList.adapter = adapter
 
+        observeLaunchPadListDataFlow()
     }
 
     private fun observeLaunchPadListDataFlow() {
@@ -66,18 +71,26 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
                             Snackbar.LENGTH_SHORT
                         ).show()
                         binding.progressBar.visibility = View.GONE
-                        binding.rvLaunchpadList.visibility = View.GONE
-                        binding.ivEmpty.visibility = View.VISIBLE
+                        showNoContentView()
                     }
                 }
                 if (loadState.append.endOfPaginationReached) {
                     if (adapter.itemCount < 1) {
-                        binding.rvLaunchpadList.visibility = View.GONE
-                        binding.ivEmpty.visibility = View.VISIBLE
+                        showNoContentView()
                     }
                 }
             }
         }
+    }
+
+    private fun showNoContentView() {
+        Snackbar.make(
+            binding.rvLaunchpadList,
+            getString(R.string.content_not_found),
+            Snackbar.LENGTH_SHORT
+        ).show()
+        binding.rvLaunchpadList.visibility = View.GONE
+        binding.ivEmpty.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

@@ -24,15 +24,7 @@ class SpaceXRepository @Inject constructor(
             ).await()
         return if (!response.hasErrors() && response.data?.launchpads != null) {
             val launchpads = response.data?.launchpads!!
-            val nonNullList = mutableListOf<LaunchPadListQuery.Launchpad>()
-            withContext(Dispatchers.Default) {
-                launchpads.forEach {
-                    it?.let { launchpad ->
-                        nonNullList.add(launchpad)
-                    }
-                }
-            }
-            nonNullList
+            launchpads.filterNotNull()
         } else {
             throw Exception(response.errors?.toString())
         }

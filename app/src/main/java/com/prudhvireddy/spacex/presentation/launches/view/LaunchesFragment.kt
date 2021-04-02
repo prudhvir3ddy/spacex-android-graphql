@@ -11,9 +11,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchesBinding
 import com.prudhvireddy.spacex.domain.LaunchPast
+import com.prudhvireddy.spacex.domain.SharedPrefs
 import com.prudhvireddy.spacex.presentation.launches.viewmodel.LaunchesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LaunchesFragment : Fragment(R.layout.fragment_launches) {
@@ -21,6 +23,8 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
     private var _binding: FragmentLaunchesBinding? = null
     private val binding: FragmentLaunchesBinding get() = _binding!!
 
+    @Inject
+    lateinit var sharedPrefs: SharedPrefs
 
     private val onItemClicked = { position: Int, item: LaunchPast ->
         item.shouldExpand = item.shouldExpand.not()
@@ -39,12 +43,12 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
 
         binding.rvLaunchList.adapter = adapter
 
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            viewModel.getLaunchesPast(args.siteId).collectLatest {
-                adapter.submitData(it)
-            }
-        }
+        getPastLaunchesData()
 
+        observeViewStates()
+    }
+
+    private fun observeViewStates() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest { loadState ->
                 when (loadState.refresh) {
@@ -57,23 +61,40 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
                             Snackbar.LENGTH_SHORT
                         ).show()
                         binding.progressBar.visibility = View.GONE
-                        binding.rvLaunchList.visibility = View.GONE
-                        binding.ivEmpty.visibility = View.VISIBLE
+                        showNoContentView()
                     }
                 }
 
                 if (loadState.append.endOfPaginationReached) {
                     if (adapter.itemCount < 1) {
-                        binding.rvLaunchList.visibility = View.GONE
-                        binding.ivEmpty.visibility = View.VISIBLE
+                        showNoContentView()
                     }
                 }
             }
         }
     }
 
+    private fun getPastLaunchesData() {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModel.getLaunchesPast(args.siteId).collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
+    private fun showNoContentView() {
+        Snackbar.make(
+            binding.rvLaunchList,
+            getString(R.string.content_not_found),
+            Snackbar.LENGTH_SHORT
+        ).show()
+        binding.rvLaunchList.visibility = View.GONE
+        binding.ivEmpty.visibility = View.VISIBLE
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }
