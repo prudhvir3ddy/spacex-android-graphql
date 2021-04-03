@@ -14,7 +14,7 @@ android app client for apollo graphql demo
 ## Useful tools when working with graphql schema generation
 - https://apollo-fullstack-tutorial.herokuapp.com/
 
-## Few things to do 
+## Few things to do - future
 - [ ] Add offline support to the app 
 - [ ] show proper messages of errors from api instead of generic screen
 - [ ] not call the api when sorting
