@@ -1,6 +1,11 @@
 # spacex-android-graphql
 android app client for apollo graphql demo 
 
+## Screenshots
+<img src="https://raw.githubusercontent.com/prudhvir3ddy/spacex-android-graphql/master/screenshots/ss1.png" width=360 height=640 alt="screenshot-mobile-launchpad" />   <img src="https://raw.githubusercontent.com/prudhvir3ddy/spacex-android-graphql/master/screenshots/ss2.png" width=360 height=640 alt="screenshot-mobile-launches" />
+
+![screenshot-tablet](https://raw.githubusercontent.com/prudhvir3ddy/spacex-android-graphql/master/screenshots/ss3.png)
+
 ## Tech Used 
 - [Kotlin](kotlinlang.org/) - primary language used to code the app
 - [Apollo Android](https://github.com/apollographql/apollo-android) - network client for graphql api consuming
