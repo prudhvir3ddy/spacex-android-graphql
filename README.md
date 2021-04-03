@@ -9,3 +9,12 @@ android app client for apollo graphql demo
 - ![Flows](https://kotlinlang.org/docs/flow.html) -  exposing data and operations from repository layer
 - ![Navigation component](https://developer.android.com/guide/navigation) -  navigating across app
 - ![Dagger hilt](https://dagger.dev/hilt/) -  dependency injection
+- ![SpaceX GraphQL API](https://github.com/spacexland/api)
+
+## Useful tools when working with graphql schema generation
+- https://apollo-fullstack-tutorial.herokuapp.com/
+
+## Few things to do 
+- [ ] Add offline support to the app 
+- [ ] show proper messages of errors from api instead of generic screen
+- [ ] not call the api when sorting
