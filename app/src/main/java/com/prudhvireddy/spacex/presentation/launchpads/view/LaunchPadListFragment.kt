@@ -1,12 +1,15 @@
 package com.prudhvireddy.spacex.presentation.launchpads.view
 
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
@@ -38,13 +41,19 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
 
     private var job: Job? = null
 
+    lateinit var navController: NavController
     private val onItemClick = { launchPad: LaunchPadListQuery.Launchpad ->
-        launchPad.id?.let {
-            val action =
-                LaunchPadListFragmentDirections.actionLaunchPadListFragmentToLaunchesFragment(
-                    it
-                )
-            findNavController().navigate(action)
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+           navController.navigate(R.id.action_launchPadListFragment_to_launchesFragment)
+        } else {
+            launchPad.id?.let {
+                val action =
+                    LaunchPadListFragmentDirections.actionLaunchPadListFragmentToLaunchesFragment(
+                        it
+                    )
+                findNavController().navigate(action)
+            }
         }
         Unit
     }
@@ -62,6 +71,15 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
         _binding = DataBindingUtil.bind(view)
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val navHostFragment =
+                childFragmentManager.findFragmentById(binding.container!!.id) as NavHostFragment?
+
+            navController = navHostFragment!!.navController
+
+        }
 
         binding.rvLaunchpadList.adapter = adapter
 
