@@ -58,7 +58,7 @@ class LaunchesFragment : Fragment(R.layout.fragment_launches) {
     private val args: LaunchesFragmentArgs by navArgs()
 
     private val viewModel: LaunchesViewModel by viewModels {
-        LaunchesViewModel.provideFactory(launchesViewModelFactory, args.siteId)
+        LaunchesViewModel.provideFactory(launchesViewModelFactory, args.siteId ?: "")
     }
 
     private var job: Job? = null

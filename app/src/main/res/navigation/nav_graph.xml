@@ -8,10 +8,18 @@
         android:id="@+id/launchPadListFragment"
         tools:layout="@layout/fragment_launchpad_list"
         android:name="com.prudhvireddy.spacex.presentation.launchpads.view.LaunchPadListFragment"
-        android:label="LaunchPads SpaceX 🔭" >
+        android:label="LaunchPads SpaceX 🔭">
         <action
             android:id="@+id/action_launchPadListFragment_to_launchesFragment"
             app:destination="@id/launchesFragment" />
+        <action
+            android:id="@+id/action_launchPadListFragment_to_nav_graph_land2"
+            app:destination="@id/nav_graph_land">
+            <argument
+                android:name="site_id"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
 
     </fragment>
     <fragment
@@ -25,6 +33,9 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="site_id"
+            android:defaultValue="@null"
+            app:nullable="true"
             app:argType="string" />
     </fragment>
+    <include app:graph="@navigation/nav_graph_land" />
 </navigation>

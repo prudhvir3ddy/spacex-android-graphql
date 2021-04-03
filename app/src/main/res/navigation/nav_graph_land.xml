@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_land"
+    app:startDestination="@id/launchesFragment2">
+
+    <fragment
+        android:id="@+id/launchesFragment2"
+        android:name="com.prudhvireddy.spacex.presentation.launches.view.LaunchesFragment"
+        android:label="LaunchesFragment">
+        <argument
+            android:name="site_id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_launchesFragment2_self"
+            app:destination="@id/launchesFragment2" />
+    </fragment>
+</navigation>

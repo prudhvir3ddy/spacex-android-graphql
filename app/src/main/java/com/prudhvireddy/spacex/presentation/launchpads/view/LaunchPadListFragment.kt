@@ -17,6 +17,7 @@ import com.prudhvireddy.spacex.LaunchPadListQuery
 import com.prudhvireddy.spacex.R
 import com.prudhvireddy.spacex.databinding.FragmentLaunchpadListBinding
 import com.prudhvireddy.spacex.domain.storage.SpaceXSharedPrefs
+import com.prudhvireddy.spacex.presentation.launches.view.LaunchesFragmentDirections
 import com.prudhvireddy.spacex.presentation.launchpads.viewmodel.LaunchPadListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -44,14 +45,13 @@ class LaunchPadListFragment : Fragment(R.layout.fragment_launchpad_list) {
     lateinit var navController: NavController
     private val onItemClick = { launchPad: LaunchPadListQuery.Launchpad ->
         val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-           navController.navigate(R.id.action_launchPadListFragment_to_launchesFragment)
-        } else {
-            launchPad.id?.let {
+        launchPad.id?.let {
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                val action = LaunchesFragmentDirections.actionLaunchesFragment2Self(it)
+                navController.navigate(action)
+            } else {
                 val action =
-                    LaunchPadListFragmentDirections.actionLaunchPadListFragmentToLaunchesFragment(
-                        it
-                    )
+                    LaunchPadListFragmentDirections.actionLaunchPadListFragmentToLaunchesFragment(it)
                 findNavController().navigate(action)
             }
         }
