@@ -20,6 +20,7 @@ android app client for apollo graphql demo
 - https://apollo-fullstack-tutorial.herokuapp.com/
 
 ## Few things to do - future
+- [ ] Migrate to jetpack compose
 - [ ] Add offline support to the app 
 - [ ] show proper messages of errors from api instead of generic screen
 - [ ] not call the api when sorting
